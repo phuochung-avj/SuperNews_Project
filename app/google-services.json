@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "264453310144",
+    "project_id": "supernews-83d2d",
+    "storage_bucket": "supernews-83d2d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:264453310144:android:5636f7b40fa79ac7b90f25",
+        "android_client_info": {
+          "package_name": "com.example.supernews"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "264453310144-i02ii5vap33gs4smkdf3phqpcvdmu69e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.supernews",
+            "certificate_hash": "ddd899b5a5e37c0eed92bf1cf694b07601f6284d"
+          }
+        },
+        {
+          "client_id": "264453310144-mogsn8mu6d69u2k1gngg4ai0tn7km3sh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNoVEzNKp14nu6SM-hVGK-kMA-5cfiU50"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "264453310144-mogsn8mu6d69u2k1gngg4ai0tn7km3sh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,4 @@
-package com.example.supernews.ui.view.view.home;
+package com.example.supernews.ui.view.home;
 
 import android.content.Intent;
 import android.os.Bundle;

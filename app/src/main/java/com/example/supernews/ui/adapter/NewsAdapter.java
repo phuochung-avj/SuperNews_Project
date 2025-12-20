@@ -1,4 +1,4 @@
-package com.example.supernews.ui.view.adapter;
+package com.example.supernews.ui.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

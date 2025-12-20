@@ -136,13 +136,13 @@ public class ProfileFragment extends Fragment {
 
                                 // Hiện các nút dành cho Admin
                                 binding.btnAdminLog.setVisibility(View.VISIBLE);
-                                binding.btnUserManage.setVisibility(View.VISIBLE); // <--- Đã thêm dòng này
+                                binding.btnUserManage.setVisibility(View.VISIBLE);
                             } else {
                                 binding.tvRole.setText("Thành viên");
 
                                 // Ẩn các nút dành cho Admin
                                 binding.btnAdminLog.setVisibility(View.GONE);
-                                binding.btnUserManage.setVisibility(View.GONE); // <--- Đã thêm dòng này
+                                binding.btnUserManage.setVisibility(View.GONE);
                             }
 
                             // Load ảnh

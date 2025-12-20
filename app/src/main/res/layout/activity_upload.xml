@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/app_background"> <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đăng bài mới"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_primary"
+        android:layout_marginBottom="20dp"/> <androidx.cardview.widget.CardView
+    android:id="@+id/cardViewImage"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardBackgroundColor="@color/content_background"
+    app:cardElevation="4dp"> <ImageView
+    android:id="@+id/imgPreview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scaleType="centerCrop"
+    android:background="@color/divider"
+    android:src="@android:drawable/ic_menu_camera" />
+    <TextView
+        android:id="@+id/tvSelectImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bấm để chọn ảnh bìa"
+        android:layout_gravity="center"
+        android:textColor="@color/text_secondary"/>
+</androidx.cardview.widget.CardView>
+
+    <EditText
+        android:id="@+id/edtImageSource"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nguồn ảnh (VD: Ảnh: Internet)"
+        android:textSize="14sp"
+        android:background="@drawable/bg_edittext_rounded"
+        android:backgroundTint="@color/input_background"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_secondary"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp"/> <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Phạm vi tin tức"
+    android:textStyle="bold"
+    android:textColor="@color/text_primary"
+    android:layout_marginBottom="8dp"/>
+
+    <RadioGroup
+        android:id="@+id/radioGroupScope"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+        <RadioButton
+            android:id="@+id/rbDomestic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trong nước"
+            android:textColor="@color/text_primary"
+            android:checked="true"
+            android:layout_marginEnd="24dp"/>
+
+        <RadioButton
+            android:id="@+id/rbInternational"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:text="Quốc tế" />
+    </RadioGroup>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tiêu đề bài viết (Bắt buộc)"
+        android:textColorHint="@color/text_secondary">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtUploadTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:textStyle="bold"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chuyên mục"
+        android:textColor="@color/text_primary"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"/>
+
+    <Spinner
+        android:id="@+id/spinnerCategory"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_spinner_rounded"
+        android:popupBackground="@color/content_background"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:layout_marginBottom="16dp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tóm tắt ngắn (Sapo)"
+        android:textColorHint="@color/text_secondary">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtUploadSummary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:minLines="2"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Nội dung chi tiết"
+        android:textColorHint="@color/text_secondary">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtUploadContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:minLines="10"
+            android:gravity="top"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Tác giả"
+        android:textColorHint="@color/text_secondary">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:focusable="false"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:inputType="none" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btnUpload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="ĐĂNG BÀI VIẾT"
+        android:textSize="16sp"
+        android:padding="12dp"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#2196F3"/>
+
+    <ProgressBar
+        android:id="@+id/progressBarUpload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+</LinearLayout>
+</ScrollView>

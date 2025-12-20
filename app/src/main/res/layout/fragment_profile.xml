@@ -43,7 +43,7 @@
             android:layout_height="36dp"
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="4dp"
-            app:cardBackgroundColor="#E0E0E0"
+            app:cardBackgroundColor="@color/divider"
             app:cardCornerRadius="18dp"
             app:cardElevation="6dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -54,7 +54,7 @@
                 android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:src="@android:drawable/ic_menu_camera"
-                app:tint="#000000" />
+                app:tint="@color/text_primary" />
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -65,7 +65,10 @@
         android:layout_marginHorizontal="32dp"
         android:layout_marginTop="24dp"
         android:hint="Tên hiển thị"
-        app:boxBackgroundColor="#FFFFFF"
+        android:textColorHint="@color/text_secondary"
+        app:hintTextColor="@color/purple_500"
+        app:boxStrokeColor="@color/purple_500"
+        app:boxBackgroundColor="@color/content_background"
         app:boxCornerRadiusBottomEnd="8dp"
         app:boxCornerRadiusBottomStart="8dp"
         app:boxCornerRadiusTopEnd="8dp"
@@ -78,7 +81,8 @@
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:textStyle="bold"
-            android:textAlignment="center"/>
+            android:textAlignment="center"
+            android:textColor="@color/text_primary" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -132,11 +136,37 @@
         app:layout_constraintTop_toBottomOf="@id/btnSaveProfile">
 
         <Button
+            android:id="@+id/btnAdminLog"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="12dp"
+            android:backgroundTint="#FF9800"
+            android:elevation="2dp"
+            android:gravity="start|center_vertical"
+            android:stateListAnimator="@null"
+            android:text="📜   Lịch sử hoạt động (Admin)"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnUserManage"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginBottom="12dp"
+            android:backgroundTint="#2196F3"
+            android:gravity="start|center_vertical"
+            android:text="👥   Quản lý tài khoản"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <Button
             android:id="@+id/btnSettings"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginBottom="12dp"
-            android:backgroundTint="#FFFFFF"
+            android:backgroundTint="@color/content_background"
             android:elevation="2dp"
             android:gravity="start|center_vertical"
             android:stateListAnimator="@null"

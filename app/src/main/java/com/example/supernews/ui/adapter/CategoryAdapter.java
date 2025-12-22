@@ -21,8 +21,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     private Context context;
     private List<String> categories;
     private OnCategoryClick listener;
-
-    // Biến quan trọng: Lưu vị trí nút đang được chọn (Mặc định là 0 - Mới nhất)
     private int selectedPosition = 0;
 
     public interface OnCategoryClick {

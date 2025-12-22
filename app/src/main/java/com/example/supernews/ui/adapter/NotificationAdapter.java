@@ -50,13 +50,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         holder.tvTitle.setText(item.getTitle());
         holder.tvBody.setText(item.getBody());
 
-        // Format thời gian (Giữ nguyên code cũ của bạn)
+        // Format thời gian
         if (item.getTimestamp() != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd/MM", Locale.getDefault());
             holder.tvTime.setText(sdf.format(item.getTimestamp().toDate()));
         }
 
-        // 🔥 PHẦN QUAN TRỌNG NHẤT: PHẢI CÓ CẢ IF VÀ ELSE 🔥
+        //  PHẦN QUAN TRỌNG NHẤT: PHẢI CÓ CẢ IF VÀ ELSE
         if (item.isRead()) {
             // TRƯỜNG HỢP ĐÃ ĐỌC:
             // 1. Phải set lại nền màu TRẮNG

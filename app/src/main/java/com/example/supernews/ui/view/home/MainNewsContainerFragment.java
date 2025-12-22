@@ -63,7 +63,7 @@ public class MainNewsContainerFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return 2; // Chỉ có 2 tab
+            return 2;
         }
     }
 

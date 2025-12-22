@@ -54,8 +54,8 @@ public class UploadActivity extends AppCompatActivity {
         // Kiểm tra ngay khi vừa mở màn hình. Nếu không phải Admin -> Đóng ngay lập tức.
         if (!com.example.supernews.data.manager.UserManager.getInstance().isAdmin()) {
             Toast.makeText(this, "⛔ Bạn không có quyền đăng bài!", Toast.LENGTH_SHORT).show();
-            finish(); // Đóng Activity
-            return;   // Dừng code, không cho chạy tiếp các dòng bên dưới
+            finish();
+            return;
         }
 
         // --- NẾU LÀ ADMIN THÌ MỚI CHẠY TIẾP ĐOẠN DƯỚI ---

@@ -52,7 +52,7 @@ public class UserManagementActivity extends AppCompatActivity {
             if(getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             toolbar.setNavigationOnClickListener(v -> finish());
 
-            // Ẩn bộ lọc của màn hình Log đi (Sửa lại đoạn này để hết lỗi)
+            // Ẩn bộ lọc của màn hình Log đi (Chỉ hiện cho Admin)
             try {
                 View chipAll = findViewById(R.id.chipAll);
                 if (chipAll != null) {

@@ -35,8 +35,6 @@ public class SavedFragment extends Fragment {
     private FragmentSavedBinding binding;
     private NewsAdapter adapter;
     private List<News> savedList;
-
-    // Các biến phục vụ tính năng Vuốt để Xóa
     private News deletedNews = null;
     private final ColorDrawable swipeBackground = new ColorDrawable(Color.parseColor("#D32F2F")); // Nền đỏ
     private Drawable deleteIcon;
@@ -51,18 +49,14 @@ public class SavedFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         // 1. Chuẩn bị icon thùng rác
         deleteIcon = ContextCompat.getDrawable(requireContext(), android.R.drawable.ic_menu_delete);
         if (deleteIcon != null) {
             deleteIcon.setTint(Color.WHITE);
         }
-
         savedList = new ArrayList<>();
-
         // 2. Cấu hình RecyclerView
         setupRecyclerView();
-
         // 3. Tải dữ liệu
         loadSavedNews();
     }
@@ -174,7 +168,7 @@ public class SavedFragment extends Fragment {
         }
 
         query.addSnapshotListener((value, error) -> {
-            // 🔥 [QUAN TRỌNG] KHIÊN CHẮN CHỐNG CRASH 🔥
+            // [QUAN TRỌNG] KHIÊN CHẮN CHỐNG CRASH
             // Nếu Fragment đã bị hủy hoặc binding null -> Dừng ngay, không làm gì cả
             if (binding == null || !isAdded()) {
                 return;
@@ -200,7 +194,6 @@ public class SavedFragment extends Fragment {
     }
 
     private void checkEmptyState() {
-        // Thêm check binding để an toàn tuyệt đối
         if (binding == null) return;
 
         if (savedList.isEmpty()) {
@@ -215,6 +208,6 @@ public class SavedFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null; // Set null để giải phóng bộ nhớ
+        binding = null;
     }
 }

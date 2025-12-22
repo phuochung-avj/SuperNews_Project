@@ -29,7 +29,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
         binding.btnConfirmChange.setOnClickListener(v -> performChangePassword());
     }
-
     private void setupToolbar() {
         setSupportActionBar(binding.toolbarChangePass);
         if (getSupportActionBar() != null) {
@@ -80,7 +79,6 @@ public class ChangePasswordActivity extends AppCompatActivity {
         binding.btnConfirmChange.setEnabled(false);
 
         // 2. Xác thực lại (Re-authenticate) - BẮT BUỘC
-        // Tạo credential từ email và mật khẩu CŨ
         AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), oldPass);
 
         user.reauthenticate(credential).addOnCompleteListener(task -> {

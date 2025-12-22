@@ -3,11 +3,10 @@ package com.example.supernews.data.model;
 import com.google.firebase.Timestamp; // Lưu ý chọn đúng gói này
 
 public class Comment {
-    private String content;     // Nội dung bình luận
-    private String userId;      // Ai bình luận?
-    private String userName;    // Tên người đó (để hiển thị cho nhanh)
-    private Timestamp timestamp; // Thời gian
-
+    private String content;
+    private String userId;
+    private String userName;
+    private Timestamp timestamp;
     public Comment() { } // Bắt buộc cho Firebase
 
     public Comment(String content, String userId, String userName, Timestamp timestamp) {

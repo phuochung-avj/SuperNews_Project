@@ -187,8 +187,6 @@ public class DetailActivity extends AppCompatActivity {
         binding.rvComments.setLayoutManager(new LinearLayoutManager(this));
         binding.rvComments.setAdapter(commentsAdapter);
     }
-
-    // Hàm tiện ích: Ẩn bàn phím
     private void hideKeyboard() {
         View view = this.getCurrentFocus();
         if (view != null) {
@@ -213,7 +211,7 @@ public class DetailActivity extends AppCompatActivity {
         db.collection("news").document(currentNews.getId())
                 .collection("comments").add(comment)
                 .addOnSuccessListener(doc -> {
-                    binding.edtComment.setText(""); // Xóa ô nhập
+                    binding.edtComment.setText("");
                     hideKeyboard(); // Ẩn bàn phím
                     binding.btnSendComment.setEnabled(true);
 

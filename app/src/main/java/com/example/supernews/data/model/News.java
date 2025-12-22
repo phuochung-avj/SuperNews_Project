@@ -24,8 +24,6 @@ public class News implements Serializable {
     private long likes;         // Lượt thích
 
     // --- 2. CONSTRUCTOR (HÀM KHỞI TẠO) ---
-
-    // Constructor rỗng: BẮT BUỘC PHẢI CÓ để Firebase Firestore map dữ liệu về
     public News() {
     }
 

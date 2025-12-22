@@ -108,8 +108,6 @@ public class EditActivity extends AppCompatActivity {
 
         if (imageUri != null) {
             // TRƯỜNG HỢP 1: NGƯỜI DÙNG CÓ CHỌN ẢNH MỚI
-            // -> Cần Upload ảnh mới, sau đó xóa ảnh cũ đi
-
             String fileName = "news_images/" + UUID.randomUUID().toString() + ".jpg";
             StorageReference imageRef = storage.getReference().child(fileName);
 
@@ -118,10 +116,8 @@ public class EditActivity extends AppCompatActivity {
                         imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                             // A. Lấy được link ảnh MỚI
                             String newImageUrl = uri.toString();
-
                             // B. Xóa ảnh CŨ đi (Dọn rác) -> QUAN TRỌNG
                             deleteOldImage(currentNews.getImageUrl());
-
                             // C. Cập nhật Database với link mới
                             updateFirestore(newImageUrl);
                         });
@@ -137,11 +133,9 @@ public class EditActivity extends AppCompatActivity {
             updateFirestore(null);
         }
     }
-
     // --- HÀM MỚI: XÓA ẢNH CŨ KHỎI STORAGE ---
     private void deleteOldImage(String oldImageUrl) {
         if (oldImageUrl == null || oldImageUrl.isEmpty()) return;
-
         // Chỉ xóa nếu ảnh đó nằm trên Firebase Storage của mình
         if (oldImageUrl.contains("firebasestorage.googleapis.com")) {
             try {

@@ -52,7 +52,6 @@ public class BookmarkManager {
 
     // --- 2. CÁC HÀM CƠ BẢN (Dùng cho SavedNewsActivity & Logic bên trong) ---
 
-    // Kiểm tra trạng thái
     public void checkIsBookmarked(String newsId, CheckCallback callback) {
         if (auth.getCurrentUser() == null) {
             callback.onResult(false);
@@ -68,9 +67,6 @@ public class BookmarkManager {
     // Thêm bookmark
     public void addBookmark(News news, BookmarkCallback callback) {
         if (auth.getCurrentUser() == null) return;
-
-        // Reset ngày tháng về hiện tại hoặc giữ nguyên tùy logic của bạn
-        // news.setPublishedAt(...);
 
         db.collection("users").document(auth.getUid())
                 .collection("bookmarks").document(news.getId())

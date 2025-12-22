@@ -33,8 +33,8 @@ public class NewsFragment extends Fragment {
     private CategoryAdapter categoryAdapter;
 
     // Biến lưu trạng thái lọc
-    private String category = "Mới nhất"; // Mặc định
-    private String scope = null;          // "domestic" hoặc "international"
+    private String category = "Mới nhất";
+    private String scope = null;
 
     // Hàm khởi tạo Fragment với tham số scope (Trong nước/Quốc tế)
     public static NewsFragment newInstance(String category, String scope) {
@@ -106,7 +106,6 @@ public class NewsFragment extends Fragment {
         binding.rvCategories.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         binding.rvCategories.setAdapter(categoryAdapter);
 
-        // --- THÊM ĐOẠN CODE NÀY ĐỂ CHỐNG TRÔI TAB ---
         binding.rvCategories.addOnItemTouchListener(new androidx.recyclerview.widget.RecyclerView.OnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(@NonNull androidx.recyclerview.widget.RecyclerView rv, @NonNull android.view.MotionEvent e) {
@@ -184,14 +183,12 @@ public class NewsFragment extends Fragment {
         });
     }
 
-    // Hàm hiện hiệu ứng xương
     private void showShimmer() {
         binding.shimmerViewContainer.setVisibility(View.VISIBLE);
         binding.shimmerViewContainer.startShimmer();
         binding.rvNews.setVisibility(View.GONE);
     }
 
-    // Hàm tắt hiệu ứng xương
     private void hideShimmer() {
         binding.shimmerViewContainer.stopShimmer();
         binding.shimmerViewContainer.setVisibility(View.GONE);
@@ -207,13 +204,12 @@ public class NewsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null; // Tránh rò rỉ bộ nhớ
+        binding = null;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        // Kiểm tra: Nếu danh sách đang trống thì tự load lại
         if (newsAdapter.getItemCount() == 0) {
             viewModel.loadNews(category, scope);
         }

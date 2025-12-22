@@ -26,10 +26,7 @@ public class SearchActivity extends AppCompatActivity {
     private ActivitySearchBinding binding;
     private FirebaseFirestore db;
     private NewsAdapter newsAdapter;
-
-    // Danh sách gốc (chứa tất cả bài viết)
     private List<News> originalList;
-    // Danh sách hiển thị (kết quả tìm kiếm)
     private List<News> searchList;
 
     @Override
@@ -43,16 +40,12 @@ public class SearchActivity extends AppCompatActivity {
         searchList = new ArrayList<>();
 
         setupRecyclerView();
-
         // Load toàn bộ dữ liệu ngay khi mở màn hình
         loadAllNewsData();
-
         binding.btnBackSearch.setOnClickListener(v -> finish());
-
         // Cấu hình ô tìm kiếm
         setupSearchView();
     }
-
     private void setupRecyclerView() {
         newsAdapter = new NewsAdapter(this, searchList, (news, imageView) -> {
             Intent intent = new Intent(SearchActivity.this, DetailActivity.class);
@@ -91,7 +84,6 @@ public class SearchActivity extends AppCompatActivity {
                     Toast.makeText(this, "Lỗi tải dữ liệu: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
-
     private void setupSearchView() {
         binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -100,7 +92,6 @@ public class SearchActivity extends AppCompatActivity {
                 hideKeyboard();
                 return true;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 // Vì lọc tại chỗ rất nhanh, ta không cần Debounce (Handler) nữa
@@ -144,7 +135,6 @@ public class SearchActivity extends AppCompatActivity {
         }
         newsAdapter.notifyDataSetChanged();
     }
-
     // Tiện ích: Ẩn/Hiện bàn phím
     private void showKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);

@@ -23,7 +23,7 @@ public class HomeViewModel extends ViewModel {
     public LiveData<Boolean> getIsLoading() { return isLoading; }
     public LiveData<String> getErrorMessage() { return errorMessage; }
 
-    // --- CẬP NHẬT: Nhận thêm scope ---
+    // --- Nhận thêm scope ---
     public void loadNews(String category, String scope) {
         isLoading.setValue(true);
 

@@ -18,7 +18,7 @@ public class RelatedAdapter extends RecyclerView.Adapter<RelatedAdapter.ViewHold
 
     private List<News> list;
     private Context context;
-    private NewsAdapter.OnNewsClickListener listener; // Tái sử dụng interface cũ
+    private NewsAdapter.OnNewsClickListener listener;
 
     public RelatedAdapter(Context context, List<News> list, NewsAdapter.OnNewsClickListener listener) {
         this.context = context;

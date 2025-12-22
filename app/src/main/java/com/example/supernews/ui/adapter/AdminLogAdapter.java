@@ -17,8 +17,6 @@ public class AdminLogAdapter extends RecyclerView.Adapter<AdminLogAdapter.LogVie
 
     private List<AdminLog> list;
     private OnItemClickListener listener;
-
-    // Interface để gửi sự kiện click ra ngoài Activity
     public interface OnItemClickListener {
         void onItemClick(AdminLog log);
     }

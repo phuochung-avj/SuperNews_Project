@@ -12,7 +12,6 @@ import com.example.supernews.ui.view.home.NewsFragment;
 public class NewsPagerAdapter extends FragmentStateAdapter {
 
     // 1. KHAI BÁO DANH SÁCH CHUYÊN MỤC (Hardcode hoặc lấy từ API)
-    // Lưu ý: Tên ở đây phải TRÙNG KHỚP 100% với trường 'source' bạn lưu trên Firebase
     private final String[] titles = new String[]{
             "Mới nhất",
             "THỂ THAO",
@@ -33,8 +32,6 @@ public class NewsPagerAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         // 2. TẠO FRAGMENT VÀ GẮN "THẺ TÊN" CHO NÓ
-        // Khi tạo NewsFragment, ta gói theo cái tên chuyên mục (Bundle)
-        // Để Fragment biết nó phải load tin gì.
 
         NewsFragment fragment = new NewsFragment();
         Bundle args = new Bundle();

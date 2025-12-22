@@ -18,7 +18,6 @@ public class PhotoViewActivity extends AppCompatActivity {
         if (imageUrl != null) {
             Glide.with(this).load(imageUrl).into(photoView);
         }
-
         findViewById(R.id.btnClosePhoto).setOnClickListener(v -> finish());
     }
 }

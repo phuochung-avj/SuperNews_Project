@@ -68,11 +68,11 @@ public class MainActivity extends AppCompatActivity {
         askNotificationPermission();
         com.google.firebase.messaging.FirebaseMessaging.getInstance().subscribeToTopic("all_news");
 
-        // 🔥 2. KIỂM TRA DEEP LINK TỪ THÔNG BÁO (LOGIC MỚI) 🔥
+        //  2. KIỂM TRA DEEP LINK TỪ THÔNG BÁO (LOGIC MỚI)
         checkDeepLinkFromNotification();
     }
 
-    // --- HÀM MỚI: XỬ LÝ KHI BẤM VÀO THÔNG BÁO ---
+    //  XỬ LÝ KHI BẤM VÀO THÔNG BÁO ---
     private void checkDeepLinkFromNotification() {
         if (getIntent() != null && getIntent().getExtras() != null) {
             String newsId = getIntent().getStringExtra("newsId");
@@ -109,8 +109,6 @@ public class MainActivity extends AppCompatActivity {
                     // Lỗi mạng hoặc lỗi server
                 });
     }
-
-    // --- CÁC HÀM CŨ GIỮ NGUYÊN ---
 
     private void askNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

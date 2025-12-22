@@ -45,8 +45,6 @@ public class UserManager {
                     } else {
                         String role = snapshot.getString("role");
 
-                        // 🔥 SỬA Ở ĐÂY: Dùng hằng số User.ROLE_ADMIN thay vì chuỗi cứng "admin"
-                        // Giúp code đồng bộ, tránh lỗi gõ sai chính tả sau này.
                         isAdmin = User.ROLE_ADMIN.equals(role);
                     }
 

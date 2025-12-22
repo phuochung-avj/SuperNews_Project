@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        // 1. CẤU HÌNH GOOGLE (Hardcode ID để đảm bảo không lỗi)
+        // 1. CẤU HÌNH GOOGLE (Hardcode ID)
         String myClientId = "264453310144-mogsn8mu6d69u2k1gngg4ai0tn7km3sh.apps.googleusercontent.com";
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -53,9 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         binding.btnLogin.setOnClickListener(v -> loginWithEmail());
         binding.btnGoogleSignIn.setOnClickListener(v -> googleSignIn());
         binding.tvRegister.setOnClickListener(v -> startActivity(new Intent(this, RegisterActivity.class)));
-
-        // Mở comment dòng này nếu đã tạo ForgotPasswordActivity
-        // binding.tvForgotPassword.setOnClickListener(v -> startActivity(new Intent(this, ForgotPasswordActivity.class)));
+        binding.tvForgotPassword.setOnClickListener(v -> startActivity(new Intent(this, ForgotPasswordActivity.class)));
 
         // 3. TIỆN ÍCH: Bấm Enter ở ô mật khẩu -> Đăng nhập luôn
         binding.edtPassword.setOnEditorActionListener((v, actionId, event) -> {

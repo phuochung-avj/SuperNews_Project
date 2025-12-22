@@ -9,7 +9,7 @@ public class SystemNotification implements Serializable {
     private String id;
     private String title;
     private String body;
-    private String newsId; // ID bài viết để mở
+    private String newsId;
     private String type;
     private boolean isRead; // Trạng thái đã đọc/chưa đọc
     private Timestamp timestamp;

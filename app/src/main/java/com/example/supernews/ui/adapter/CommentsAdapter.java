@@ -39,7 +39,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         // 2. Nội dung bình luận
         holder.tvContent.setText(comment.getContent());
 
-        // 3. Xử lý thời gian (VD: "2 phút trước")
+        // 3. Xử lý thời gian
         if (comment.getTimestamp() != null) {
             long time = comment.getTimestamp().toDate().getTime();
             long now = System.currentTimeMillis();
@@ -50,7 +50,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
             holder.tvTime.setText("Vừa xong");
         }
 
-        // 4. Avatar (Tạm thời để mặc định, bạn có thể nâng cấp load ảnh từ URL user sau)
+        // 4. Avatar
         holder.imgAvatar.setImageResource(R.mipmap.ic_launcher_round);
     }
 

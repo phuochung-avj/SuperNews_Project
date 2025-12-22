@@ -88,18 +88,15 @@ public class AdminLogActivity extends AppCompatActivity {
         if (actionFilter != null) {
             query = query.whereEqualTo("action", actionFilter);
         }
-
         query.addSnapshotListener((value, error) -> {
             // Kiểm tra Activity còn sống không để tránh lỗi crash
             if (isDestroyed() || isFinishing()) return;
-
             progressBar.setVisibility(View.GONE);
             if (error != null) {
                 // Nếu chưa sửa Rules, nó sẽ báo lỗi ở đây
                 Toast.makeText(this, "Lỗi tải Log: " + error.getMessage(), Toast.LENGTH_LONG).show();
                 return;
             }
-
             if (value != null) {
                 logList.clear();
                 for (QueryDocumentSnapshot doc : value) {
@@ -108,7 +105,6 @@ public class AdminLogActivity extends AppCompatActivity {
                     logList.add(log);
                 }
                 adapter.notifyDataSetChanged();
-
                 if(logList.isEmpty()) {
                     Toast.makeText(this, "Không tìm thấy hoạt động nào", Toast.LENGTH_SHORT).show();
                 }
@@ -116,7 +112,7 @@ public class AdminLogActivity extends AppCompatActivity {
         });
     }
 
-    // 🔥 TÍNH NĂNG CHI TIẾT: HIỆN BOTTOM SHEET 🔥
+    //  TÍNH NĂNG CHI TIẾT: HIỆN BOTTOM SHEET
     private void showDetailDialog(AdminLog log) {
         BottomSheetDialog dialog = new BottomSheetDialog(this);
         dialog.setContentView(R.layout.layout_log_detail_popup);

@@ -32,8 +32,6 @@ public class NotificationFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
-
-    // 👇 SỬA Ở ĐÂY: Đổi TextView thành View để dùng cho cả cụm LinearLayout
     private View layoutEmpty;
 
     private FirebaseFirestore db;
@@ -43,7 +41,6 @@ public class NotificationFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Nhớ đảm bảo file xml tên đúng là fragment_notification nhé
         return inflater.inflate(R.layout.fragment_notification, container, false);
     }
 
@@ -53,8 +50,6 @@ public class NotificationFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.rvNotifications);
         progressBar = view.findViewById(R.id.progressBarNoti);
-
-        // 👇 SỬA Ở ĐÂY: Ánh xạ ID mới
         layoutEmpty = view.findViewById(R.id.layoutEmpty);
 
         db = FirebaseFirestore.getInstance();
@@ -63,9 +58,6 @@ public class NotificationFragment extends Fragment {
         setupRecyclerView();
         loadNotifications();
     }
-
-    // ... (Các hàm setupRecyclerView, onNotificationClick, openNewsDetail GIỮ NGUYÊN) ...
-    // ... Bạn copy lại từ code cũ nhé ...
     private void setupRecyclerView() {
         adapter = new NotificationAdapter(requireContext(), notiList, this::onNotificationClick);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));

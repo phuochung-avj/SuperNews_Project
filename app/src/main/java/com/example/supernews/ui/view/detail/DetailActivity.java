@@ -266,18 +266,22 @@ public class DetailActivity extends AppCompatActivity {
 
         binding.btnSendComment.setEnabled(false); // Khóa nút gửi
 
-        Comment comment = new Comment(content, currentUser.getUid(), currentUser.getDisplayName(), Timestamp.now());
+        String userAvatar = null;
+        if (currentUser.getPhotoUrl() != null) {
+            userAvatar = currentUser.getPhotoUrl().toString();
+        }
+
+        Comment comment = new Comment(content, currentUser.getUid(), currentUser.getDisplayName(), userAvatar, Timestamp.now());
 
         db.collection("news").document(currentNews.getId())
                 .collection("comments").add(comment)
                 .addOnSuccessListener(doc -> {
                     binding.edtComment.setText("");
-                    hideKeyboard(); // Ẩn bàn phím
+                    hideKeyboard();
                     binding.btnSendComment.setEnabled(true);
 
                     Toast.makeText(this, "Đã gửi bình luận!", Toast.LENGTH_SHORT).show();
 
-                    // Cuộn xuống cuối danh sách
                     if (commentsAdapter.getItemCount() > 0) {
                         binding.rvComments.smoothScrollToPosition(commentsAdapter.getItemCount() - 1);
                     }

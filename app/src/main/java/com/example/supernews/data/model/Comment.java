@@ -6,13 +6,15 @@ public class Comment {
     private String content;
     private String userId;
     private String userName;
+    private String avatarUrl;
     private Timestamp timestamp;
     public Comment() { } // Bắt buộc cho Firebase
 
-    public Comment(String content, String userId, String userName, Timestamp timestamp) {
+    public Comment(String content, String userId, String userName, String avatarUrl, Timestamp timestamp) {
         this.content = content;
         this.userId = userId;
         this.userName = userName;
+        this.avatarUrl = avatarUrl;
         this.timestamp = timestamp;
     }
 
@@ -25,7 +27,8 @@ public class Comment {
 
     public String getUserName() { return userName; }
     public void setUserName(String userName) { this.userName = userName; }
-
+    public String getAvatarUrl() { return avatarUrl; }
+    public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
     public Timestamp getTimestamp() { return timestamp; }
     public void setTimestamp(Timestamp timestamp) { this.timestamp = timestamp; }
 }

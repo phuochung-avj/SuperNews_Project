@@ -33,25 +33,36 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
         Comment comment = list.get(position);
 
-        // 1. Tên người dùng (In đậm)
+        // 1. Tên người dùng
         holder.tvUser.setText(comment.getUserName() != null ? comment.getUserName() : "Người dùng ẩn danh");
 
-        // 2. Nội dung bình luận
+        // 2. Nội dung
         holder.tvContent.setText(comment.getContent());
 
-        // 3. Xử lý thời gian
+        // 3. Thời gian
         if (comment.getTimestamp() != null) {
             long time = comment.getTimestamp().toDate().getTime();
             long now = System.currentTimeMillis();
-            // Dùng hàm có sẵn của Android để tính khoảng cách thời gian
             CharSequence ago = DateUtils.getRelativeTimeSpanString(time, now, DateUtils.MINUTE_IN_MILLIS);
             holder.tvTime.setText(ago);
         } else {
             holder.tvTime.setText("Vừa xong");
         }
 
-        // 4. Avatar
-        holder.imgAvatar.setImageResource(R.mipmap.ic_launcher_round);
+        // 4. 🔥 LOGIC MỚI: Hiển thị Avatar
+        String avatarUrl = comment.getAvatarUrl(); // Cần đảm bảo Model Comment có getter này
+
+        if (avatarUrl != null && !avatarUrl.isEmpty()) {
+            com.bumptech.glide.Glide.with(holder.itemView.getContext())
+                    .load(avatarUrl)
+                    .circleCrop() // Bo tròn ảnh
+                    .placeholder(R.drawable.ic_launcher_background) // Ảnh chờ (nếu chưa tải xong)
+                    .error(R.drawable.ic_launcher_background)       // Ảnh lỗi (nếu link hỏng)
+                    .into(holder.imgAvatar);
+        } else {
+            // Nếu không có link ảnh -> Hiện ảnh mặc định
+            holder.imgAvatar.setImageResource(R.drawable.ic_launcher_background);
+        }
     }
 
     @Override

@@ -13,4 +13,7 @@
     <color name="text_secondary">#B0B0B0</color>
     <color name="input_background">#2C2C2C</color>
     <color name="divider">#424242</color>
+    <color name="card_background">#1E1E1E</color>
+    <color name="admin_label_bg">#3E2723</color>
+    <color name="admin_label_text">#FFCDD2</color>
 </resources>

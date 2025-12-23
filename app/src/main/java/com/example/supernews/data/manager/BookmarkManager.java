@@ -2,6 +2,7 @@ package com.example.supernews.data.manager;
 
 import com.example.supernews.data.model.News;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -77,13 +78,27 @@ public class BookmarkManager {
 
     // Xóa bookmark
     public void removeBookmark(String newsId, BookmarkCallback callback) {
-        if (auth.getCurrentUser() == null) return;
+        // 1. Lấy User hiện tại một cách an toàn
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        db.collection("users").document(auth.getUid())
+        // 2. Kiểm tra Null kỹ càng
+        if (currentUser == null) {
+            // Nếu chưa đăng nhập thì không làm gì cả (hoặc báo lỗi)
+            return;
+        }
+
+        String uid = currentUser.getUid(); // Lấy UID an toàn
+
+        // 3. Thực hiện xóa
+        db.collection("users").document(uid)
                 .collection("bookmarks").document(newsId)
                 .delete()
-                .addOnSuccessListener(v -> callback.onSuccess(false))
-                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+                .addOnSuccessListener(aVoid -> {
+                    if (callback != null) callback.onSuccess(false); // false nghĩa là "đã bỏ lưu"
+                })
+                .addOnFailureListener(e -> {
+                    if (callback != null) callback.onFailure(e.getMessage());
+                });
     }
 
     // Lấy Query để lắng nghe (Dùng cho SavedNewsActivity)

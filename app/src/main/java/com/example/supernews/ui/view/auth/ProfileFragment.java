@@ -64,7 +64,6 @@ public class ProfileFragment extends Fragment {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -117,7 +116,34 @@ public class ProfileFragment extends Fragment {
 
     private void loadUserProfile() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser == null) return;
+
+        // --- TRƯỜNG HỢP 1: LÀ KHÁCH (GUEST) ---
+        if (currentUser == null) {
+            // 1. Set thông tin giả
+            binding.edtName.setText("Khách tham quan");
+            binding.edtName.setEnabled(false); // Khóa không cho sửa tên
+            binding.tvEmail.setText("Vui lòng đăng nhập để sử dụng đầy đủ tính năng");
+            binding.tvRole.setVisibility(View.GONE);
+
+            // 2. Set ảnh mặc định
+            binding.imgAvatar.setImageResource(R.drawable.ic_launcher_foreground);
+            binding.layoutAvatar.setEnabled(false); // Không cho bấm đổi ảnh
+
+            // 3. Ẩn hết các nút chức năng
+            binding.btnSaveProfile.setVisibility(View.GONE);
+            binding.btnSettings.setVisibility(View.GONE);
+            binding.btnAdminLog.setVisibility(View.GONE);
+            binding.btnUserManage.setVisibility(View.GONE);
+
+            // 4. Đổi nút Đăng xuất -> Đăng nhập
+            binding.btnLogout.setText("Đăng nhập ngay");
+            return;
+        }
+
+        // --- TRƯỜNG HỢP 2: ĐÃ ĐĂNG NHẬP ---
+        binding.edtName.setEnabled(true);
+        binding.layoutAvatar.setEnabled(true);
+        binding.btnLogout.setText("Đăng xuất");
 
         db.collection("users").document(currentUser.getUid()).get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -129,18 +155,16 @@ public class ProfileFragment extends Fragment {
                             binding.edtName.setText(user.getName());
                             binding.tvEmail.setText(user.getEmail());
 
-                            // 🔥 LOGIC PHÂN QUYỀN: ẨN/HIỆN NÚT 🔥
+                            // Logic phân quyền Admin
                             if (User.ROLE_ADMIN.equals(user.getRole())) {
                                 binding.tvRole.setText("QUẢN TRỊ VIÊN");
+                                binding.tvRole.setVisibility(View.VISIBLE);
                                 binding.tvRole.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
-
-                                // Hiện các nút dành cho Admin
                                 binding.btnAdminLog.setVisibility(View.VISIBLE);
                                 binding.btnUserManage.setVisibility(View.VISIBLE);
                             } else {
                                 binding.tvRole.setText("Thành viên");
-
-                                // Ẩn các nút dành cho Admin
+                                binding.tvRole.setVisibility(View.VISIBLE);
                                 binding.btnAdminLog.setVisibility(View.GONE);
                                 binding.btnUserManage.setVisibility(View.GONE);
                             }
@@ -152,13 +176,11 @@ public class ProfileFragment extends Fragment {
                                     avatarUrl = currentUser.getPhotoUrl().toString();
                                 }
                             }
-
                             if (avatarUrl != null && !avatarUrl.isEmpty()) {
                                 Glide.with(this).load(avatarUrl).placeholder(R.drawable.ic_launcher_background).circleCrop().into(binding.imgAvatar);
                             } else {
                                 binding.imgAvatar.setImageResource(R.drawable.ic_launcher_background);
                             }
-
                             binding.btnSaveProfile.setVisibility(View.GONE);
                         }
                     }

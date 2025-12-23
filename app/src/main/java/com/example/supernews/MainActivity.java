@@ -1,6 +1,8 @@
 package com.example.supernews;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,10 +11,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.supernews.data.manager.UserManager;
-import com.example.supernews.data.model.News;
 import com.example.supernews.databinding.ActivityMainBinding;
 import com.example.supernews.ui.view.SearchActivity;
 import com.example.supernews.ui.view.UploadActivity;
@@ -21,11 +23,13 @@ import com.example.supernews.ui.view.detail.DetailActivity;
 import com.example.supernews.ui.view.home.MainNewsContainerFragment;
 import com.example.supernews.ui.view.notification.NotificationFragment;
 import com.example.supernews.ui.view.saved.SavedFragment;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private boolean isGuest = false; // Biến kiểm tra khách
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +37,62 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // 1. Cấu hình Toolbar
         setSupportActionBar(binding.toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("SuperNews");
+        }
 
-        // Mặc định load tab Trang chủ
+        // 2. Kiểm tra chế độ Khách
+        isGuest = getIntent().getBooleanExtra("IS_GUEST", false);
+
+        // Nếu không phải khách -> Lắng nghe quyền Admin để cập nhật Menu
+        if (!isGuest) {
+            UserManager.getInstance().startListeningRole(isAdmin -> invalidateOptionsMenu());
+        }
+
+        // 3. Khởi tạo giao diện mặc định
         loadFragment(new MainNewsContainerFragment());
-        getSupportActionBar().setTitle("SuperNews");
+        setupBottomNavigation();
 
-        // Xử lý sự kiện bấm Bottom Navigation
+        // 4. Đăng ký nhận thông báo & Xin quyền
+        FirebaseMessaging.getInstance().subscribeToTopic("all_news");
+        askNotificationPermission();
+
+        // 5. Kiểm tra thông báo (Deep Link) khi mở App lần đầu
+        processDeepLink(getIntent());
+    }
+
+    // --- QUAN TRỌNG: Xử lý thông báo khi App đang chạy ngầm ---
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent); // Cập nhật Intent mới nhất
+        processDeepLink(intent); // Xử lý lại logic mở bài viết
+    }
+
+    // Xử lý logic mở bài viết từ thông báo
+    private void processDeepLink(Intent intent) {
+        if (intent != null && intent.getExtras() != null) {
+            String newsId = intent.getStringExtra("newsId");
+            String type = intent.getStringExtra("type");
+
+            // Chỉ xử lý khi có ID và đúng loại thông báo
+            if (newsId != null && !newsId.isEmpty()) {
+                openNewsDetailOnlyId(newsId);
+            }
+        }
+    }
+
+    // Mở màn hình chi tiết NGAY LẬP TỨC (Không query Firestore ở đây để tránh Lag)
+    private void openNewsDetailOnlyId(String newsId) {
+        Intent intent = new Intent(this, DetailActivity.class);
+        // Gửi ID sang, bên DetailActivity sẽ tự tải dữ liệu
+        intent.putExtra("news_id_only", newsId);
+        startActivity(intent);
+    }
+
+    private void setupBottomNavigation() {
         binding.bottomNavigation.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             Fragment fragment = null;
@@ -53,97 +106,62 @@ public class MainActivity extends AppCompatActivity {
                 title = "Tin đã lưu";
             } else if (id == R.id.nav_profile) {
                 fragment = new ProfileFragment();
-                title = "Hồ sơ cá nhân";
+                title = isGuest ? "Khách tham quan" : "Hồ sơ cá nhân";
             }
 
             if (fragment != null) {
                 loadFragment(fragment);
-                getSupportActionBar().setTitle(title);
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle(title);
+                }
                 return true;
             }
             return false;
         });
-
-        // 1. Xin quyền & Đăng ký nhận tin
-        askNotificationPermission();
-        com.google.firebase.messaging.FirebaseMessaging.getInstance().subscribeToTopic("all_news");
-
-        //  2. KIỂM TRA DEEP LINK TỪ THÔNG BÁO (LOGIC MỚI)
-        checkDeepLinkFromNotification();
-    }
-
-    //  XỬ LÝ KHI BẤM VÀO THÔNG BÁO ---
-    private void checkDeepLinkFromNotification() {
-        if (getIntent() != null && getIntent().getExtras() != null) {
-            String newsId = getIntent().getStringExtra("newsId");
-            String type = getIntent().getStringExtra("type");
-
-            // Nếu đúng là thông báo tin tức và có ID
-            if (newsId != null && !newsId.isEmpty() && "news_alert".equals(type)) {
-                openNewsDetail(newsId);
-            }
-        }
-    }
-
-    // --- HÀM MỚI: TẢI TIN & MỞ DETAIL ACTIVITY ---
-    private void openNewsDetail(String newsId) {
-        // Có thể hiện Loading nhẹ ở đây nếu muốn
-        FirebaseFirestore.getInstance()
-                .collection("news").document(newsId).get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        News news = documentSnapshot.toObject(News.class);
-                        if (news != null) {
-                            news.setId(documentSnapshot.getId());
-
-                            // Mở màn hình chi tiết
-                            Intent intent = new Intent(this, DetailActivity.class);
-                            intent.putExtra("object_news", news);
-                            startActivity(intent);
-                        }
-                    } else {
-                        Toast.makeText(this, "Bài viết không tồn tại hoặc đã bị xóa", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    // Lỗi mạng hoặc lỗi server
-                });
-    }
-
-    private void askNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (androidx.core.content.ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) !=
-                    android.content.pm.PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 101);
-            }
-        }
     }
 
     private void loadFragment(Fragment fragment) {
+        // Có thể nâng cấp lên show/hide nếu muốn giữ trạng thái cuộn
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .commit();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        UserManager.getInstance().startListeningRole(isAdmin -> invalidateOptionsMenu());
+    // Xin quyền thông báo cho Android 13+
+    private void askNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        UserManager.getInstance().stopListening();
+        // Dừng lắng nghe khi thoát App để tránh rò rỉ bộ nhớ
+        if (!isGuest) {
+            UserManager.getInstance().stopListening();
+        }
     }
+
+    // --- MENU LOGIC ---
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         MenuItem uploadItem = menu.findItem(R.id.action_upload);
+        MenuItem notiItem = menu.findItem(R.id.action_notification);
+
+        // Logic hiển thị nút Upload (Chỉ Admin mới thấy)
         if (uploadItem != null) {
-            uploadItem.setVisible(UserManager.getInstance().isAdmin());
+            boolean isAdmin = UserManager.getInstance().isAdmin();
+            // Nếu là Khách hoặc không phải Admin -> Ẩn nút Upload
+            uploadItem.setVisible(!isGuest && isAdmin);
         }
+
         return true;
     }
 
@@ -159,7 +177,9 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.action_notification) {
             loadFragment(new NotificationFragment());
-            getSupportActionBar().setTitle("Thông báo");
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle("Thông báo");
+            }
             return true;
         }
 

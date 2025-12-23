@@ -73,7 +73,16 @@ public class DetailActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
-
+        if (getIntent().hasExtra("object_news")) {
+            // Trường hợp 1: Có sẵn object
+            currentNews = (News) getIntent().getSerializableExtra("object_news");
+            displayData(currentNews); // Gọi hàm mới sửa
+        }
+        else if (getIntent().hasExtra("news_id_only")) {
+            // Trường hợp 2: Chỉ có ID -> Tải dữ liệu
+            String newsId = getIntent().getStringExtra("news_id_only");
+            fetchNewsById(newsId); // Gọi hàm mới thêm
+        }
         db = FirebaseFirestore.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -83,7 +92,6 @@ public class DetailActivity extends AppCompatActivity {
         currentNews = (News) getIntent().getSerializableExtra("object_news");
 
         if (currentNews != null) {
-            displayNewsData();
             increaseViewCount();
 
             // Các tính năng tương tác
@@ -101,40 +109,89 @@ public class DetailActivity extends AppCompatActivity {
         binding.btnSendComment.setOnClickListener(v -> postComment());
         binding.btnLike.setOnClickListener(v -> toggleLikeNews());
     }
+    private void fetchNewsById(String newsId) {
+        if (binding.progressBarDetail != null) {
+            binding.progressBarDetail.setVisibility(View.VISIBLE);
+        }
 
+        db.collection("news").document(newsId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        News news = documentSnapshot.toObject(News.class);
+                        if (news != null) {
+                            news.setId(documentSnapshot.getId());
+                            currentNews = news; // Cập nhật biến toàn cục
+
+                            displayData(currentNews); // Hiển thị dữ liệu
+
+                            // Kích hoạt lại các logic phụ thuộc vào currentNews
+                            increaseViewCount();
+                            checkIsSaved();
+                            checkIsLiked();
+                            setupCommentsRecycler();
+                            loadCommentsRealtime();
+                            loadRelatedNews();
+                        }
+                    } else {
+                        Toast.makeText(this, "Bài viết không tồn tại hoặc đã bị xóa", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                    if (binding.progressBarDetail != null) {
+                        binding.progressBarDetail.setVisibility(View.GONE);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    if (binding.progressBarDetail != null) {
+                        binding.progressBarDetail.setVisibility(View.GONE);
+                    }
+                    Toast.makeText(this, "Lỗi tải dữ liệu: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    finish();
+                });
+    }
     // --- PHẦN 1: HIỂN THỊ DỮ LIỆU ---
 
-    private void displayNewsData() {
-        binding.tvDetailTitle.setText(currentNews.getTitle());
-        binding.tvDetailDate.setText(currentNews.getPublishedAt());
-        binding.tvDetailContent.setText(currentNews.getContent());
-        binding.tvDetailViews.setText(currentNews.getViews() + "");
-        binding.tvLikeCount.setText(String.valueOf(currentNews.getLikes()));
+    private void displayData(News news) {
+        if (news == null) return;
 
-        String sourceText = currentNews.getSource();
-        if (currentNews.getAuthor() != null && !currentNews.getAuthor().isEmpty()) {
-            sourceText = sourceText + " • " + currentNews.getAuthor();
+        // Cập nhật biến toàn cục nếu chưa có
+        if (currentNews == null) currentNews = news;
+
+        // 1. Hiển thị thông tin cơ bản
+        binding.tvDetailTitle.setText(news.getTitle());
+        // Kiểm tra null cho ngày tháng
+        binding.tvDetailDate.setText(news.getPublishedAt() != null ? news.getPublishedAt() : "");
+        binding.tvDetailContent.setText(news.getContent());
+        binding.tvDetailViews.setText(String.valueOf(news.getViews()));
+        binding.tvLikeCount.setText(String.valueOf(news.getLikes()));
+
+        // 2. Xử lý Nguồn & Tác giả
+        String sourceText = news.getSource() != null ? news.getSource() : "Tin tức";
+        if (news.getAuthor() != null && !news.getAuthor().isEmpty()) {
+            sourceText = sourceText + " • " + news.getAuthor();
         }
         binding.tvDetailSource.setText(sourceText);
 
-        if (currentNews.getImageSource() != null && !currentNews.getImageSource().isEmpty()) {
-            binding.tvImageCaption.setText(currentNews.getImageSource());
+        // 3. Xử lý Chú thích ảnh
+        if (news.getImageSource() != null && !news.getImageSource().isEmpty()) {
+            binding.tvImageCaption.setText(news.getImageSource());
         } else {
             binding.tvImageCaption.setText("Ảnh minh họa / Nguồn Internet");
         }
 
-        // Xử lý ảnh (Tối ưu cho Shared Element Transition)
-        if (currentNews.getImageUrl() != null) {
-            if (currentNews.getImageUrl().startsWith("http")) {
+        // 4. Xử lý Ảnh bìa (Giữ nguyên logic Glide của bạn)
+        if (news.getImageUrl() != null) {
+            if (news.getImageUrl().startsWith("http")) {
                 Glide.with(this)
-                        .load(currentNews.getImageUrl())
+                        .load(news.getImageUrl())
                         .placeholder(R.drawable.ic_launcher_background)
                         .error(R.drawable.ic_launcher_foreground)
-                        .dontAnimate() // QUAN TRỌNG: Tắt animation để chuyển cảnh mượt
+                        .dontAnimate()
                         .into(binding.imgDetailThumb);
             } else {
                 try {
-                    byte[] imageBytes = Base64.decode(currentNews.getImageUrl(), Base64.DEFAULT);
+                    // Xử lý ảnh Base64 (nếu có)
+                    byte[] imageBytes = Base64.decode(news.getImageUrl(), Base64.DEFAULT);
                     Glide.with(this)
                             .load(imageBytes)
                             .placeholder(R.drawable.ic_launcher_background)
@@ -142,6 +199,9 @@ public class DetailActivity extends AppCompatActivity {
                             .into(binding.imgDetailThumb);
                 } catch (Exception e) {}
             }
+        } else {
+            binding.imgDetailThumb.setVisibility(View.GONE);
+            binding.tvImageCaption.setVisibility(View.GONE);
         }
     }
     private void increaseViewCount() {

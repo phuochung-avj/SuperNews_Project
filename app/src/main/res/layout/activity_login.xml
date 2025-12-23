@@ -147,9 +147,23 @@
                         android:textColor="#555555"
                         android:textSize="16sp"
                         android:textStyle="bold" />
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+            <TextView
+                android:id="@+id/tvSkipLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bỏ qua và xem tin tức >>"
+                android:textColor="#757575"
+                android:textSize="14sp"
+                android:textStyle="italic"
+                android:padding="12dp"
 
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginBottom="24dp"/>
             <TextView
                 android:id="@+id/tvRegister"
                 android:layout_width="wrap_content"

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -12,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.supernews.MainActivity;
+import com.example.supernews.R;
 import com.example.supernews.data.model.User;
 import com.example.supernews.databinding.ActivityLoginBinding;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -62,6 +64,25 @@ public class LoginActivity extends AppCompatActivity {
                 return true;
             }
             return false;
+        });
+        TextView tvSkip = findViewById(R.id.tvSkipLogin);
+
+        tvSkip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 1. Tạo Intent để chuyển sang màn hình chính
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+
+                // 2. QUAN TRỌNG: Gửi kèm "Cờ hiệu" (Flag) để báo đây là Khách
+                // Key là "IS_GUEST", Value là true
+                intent.putExtra("IS_GUEST", true);
+
+                // 3. Khởi chạy
+                startActivity(intent);
+
+                // 4. Đóng màn hình Login lại để người dùng không back về được
+                finish();
+            }
         });
     }
 

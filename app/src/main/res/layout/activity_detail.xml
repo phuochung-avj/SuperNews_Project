@@ -32,6 +32,7 @@
                 android:id="@+id/imgDetailThumb"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
+                android:adjustViewBounds="true"
                 android:transitionName="news_image_transition"
                 android:scaleType="centerCrop"
                 android:src="@android:drawable/ic_menu_gallery"
